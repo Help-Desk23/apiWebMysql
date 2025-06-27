@@ -125,7 +125,7 @@ const loginAdmin = async (req, res) => {
     const {email, password} = req.body;
 
     try{
-        const query = "SELECT * FROM useradmin WHERE email = ? AND password = ?";
+        const query = "SELECT * FROM useradmin WHERE email = ? AND contraseña = ?";
         const values = [email, password];
 
         db.query(query, values, (error, result) => {
@@ -138,7 +138,7 @@ const loginAdmin = async (req, res) => {
             }
             const admin = result[0];
 
-            if(asesor.estado !== 'activo'){
+            if(admin.estado !== 'activo'){
                 return res.status(403).json({message: "El usuario esta inhabilitado"});
             }
 

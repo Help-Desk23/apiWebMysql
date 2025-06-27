@@ -27,6 +27,10 @@ const { getCategoria } = require('./controls/categoria/categoria');
 const categoriaRouter = require('./router/categoriaRouter/categoriaRouter');
 const { getAccesorios } = require('./controls/accesorios/accesorios');
 const accesorioRouter = require('./router/accesorioRouter/accesorioRouter');
+const { getSucursal } = require('./controls/sucursal/sucursal');
+const sucursalRouter = require('./router/sucursalRouter/sucursalRouter');
+const { getTalleres } = require('./controls/talleres/talleres');
+const tallerRouter = require('./router/tallerRouter/tallerRouter');
 
 
 
@@ -70,6 +74,8 @@ io.on('connection', (socket) => {
     socket.on('obtenerCategoria', () => getCategoria(socket));
     socket.on('obtenerAccesorios', () => getAccesorios(socket));
     socket.on('obtenerMotosCompletas', () => getMotoCompleta(socket));
+    socket.on('obtenerSucursal', () => getSucursal(socket));
+    socket.on('obtenerTaller', () => getTalleres(socket));
 
     socket.on('disconnect', () => {
         console.log('Cliente desconectado:', socket.id);
@@ -92,6 +98,8 @@ app.use('/', seguridadRouter);
 app.use('/', repuestosRouter);
 app.use('/', categoriaRouter);
 app.use('/', accesorioRouter);
+app.use('/', sucursalRouter);
+app.use('/', tallerRouter);
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 

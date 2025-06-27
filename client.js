@@ -1,12 +1,12 @@
 const io = require('socket.io-client');
-const socket = io('http://177.222.114.122:6000');
+const socket = io('http://177.222.114.122:7000');
 
 socket.on('connect', () => {
     console.log('Conectado al servidor WebSocket');
-    socket.emit('obtenerMotosCompletas');
+    socket.emit('obtenerTaller');
 });
 
-socket.on('motosCompletas', (data) => {
+socket.on('taller', (data) => {
     console.log('Datos mostrados:', data);
 });
 
