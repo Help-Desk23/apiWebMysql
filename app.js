@@ -1,9 +1,10 @@
 const express = require('express');
-const db = require('./config/db');
-const socketIo = require('socket.io');
 const http = require('http');
+const socketIo = require('socket.io');
 const path = require('path');
 const cors = require('cors');
+require('dotenv').config();
+
 const { getAdmin } = require('./controls/userAdmin/users');
 const adminRuter = require('./router/adminRouter/adminRouter');
 const { getCliente } = require('./controls/cliente/cliente');
@@ -26,14 +27,15 @@ const { getCategoria } = require('./controls/categoria/categoria');
 const categoriaRouter = require('./router/categoriaRouter/categoriaRouter');
 const { getAccesorios } = require('./controls/accesorios/accesorios');
 const accesorioRouter = require('./router/accesorioRouter/accesorioRouter');
-require('dotenv').config();
+
 
 
 const app = express();
 
 app.use(cors({
   origin: [
-    'http://localhost:3000',            
+    'http://localhost:6000',            
+    'http://177.222.114.122',
     'http://localhost'            
   ],
   methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT'],
@@ -45,7 +47,12 @@ app.use(express.json());
 
 
 const server = http.createServer(app);
-const io = socketIo(server);
+const io = socketIo(server, {
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT']
+  }
+});
 
 io.on('connection', (socket) => {
     console.log("Cliente conectado:", socket.id);
