@@ -1,5 +1,5 @@
 const express = require('express');
-const { addMoto, updateMoto, deleteMoto, deleteMotoCompleta } = require('../../controls/moto/moto');
+const { addMoto, updateMoto, deleteMotoCompleta } = require('../../controls/moto/moto');
 
 const motoRouter = express.Router();
 
@@ -11,13 +11,8 @@ motoRouter.post("/moto", addMoto);
 
 motoRouter.patch("/moto/:id", updateMoto);
 
-//Ruta para eliminar motos
-
-motoRouter.delete("/moto/:id", deleteMoto);
-
-
 //Ruta para eliminar motos y sus relaciones
 
-motoRouter.delete("moto/:id_moto", deleteMotoCompleta);
+motoRouter.delete("/moto/:id_moto", deleteMotoCompleta);
 
 module.exports = motoRouter;

@@ -94,23 +94,6 @@ const updateMoto = async (req, res) => {
     });
 };
 
-//Controlador DELETE para eliminar moto
-
-const deleteMoto = async (req, res) => {
-    const {id} = req.params;
-    const query = 'DELETE FROM moto WHERE id_moto = ?';
-    const values = [id];
-
-    db.query(query, values, (error, result) => {
-        if(error){
-            console.error("Error al eliminar moto", error);
-            return res.status(500).json({error: "Error al eliminar una moto"});
-        } else {
-            res.status(201).json({message: "Moto eliminada correctamente"});
-        }
-    });
-};
-
 //Controlador Socket.emit muestra todas las motos con caracteristicas completas
 
 const getMotoCompleta = async (socket) => {
@@ -214,7 +197,6 @@ module.exports = {
     getMoto,
     addMoto,
     updateMoto,
-    deleteMoto,
     getMotoCompleta,
     deleteMotoCompleta
 };

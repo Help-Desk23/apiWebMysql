@@ -37,8 +37,7 @@ const getRepuestos = async (socket) => {
 
 const addRepuestos = async (req, res) => {
     const {id_marca, nombre_repuesto, detalle} = req.body;
-    const port = req.get('host').split(':')[1];
-    const imagen_repuesto = req.file ? `https://www.api.vian.com.bo:${port}/uploads/${req.file.filename}` : null;
+    const imagen_repuesto = req.file ? `https://www.api.vian.com.bo/uploads/${req.file.filename}` : null;
     const fecha_registro = new Date();
 
     try{
@@ -59,7 +58,7 @@ const updateRepuestos = async (req, res) => {
     const {id} = req.params;
     const {id_marca, nombre_repuesto, detalle} = req.body;
     const port = req.get('host').split(':')[1];
-    const imagen_repuesto = req.file ? `https://www.api.vian.com.bo:${port}/uploads/${req.file.filename}` : null;
+    const imagen_repuesto = req.file ? `https://www.api.vian.com.bo/uploads/${req.file.filename}` : null;
     const fecha_registro = new Date();
 
     const update = [];
