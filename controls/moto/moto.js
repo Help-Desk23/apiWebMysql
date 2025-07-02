@@ -25,7 +25,7 @@ const addMoto = async (req, res) => {
     const fecha_registro = new Date();
 
     try{
-        const query = 'INSERT INTO moto (id_marca, modelo, descripcion, years, destacado) VALUES (?, ?, ?, ?, ?)';
+        const query = 'INSERT INTO moto (id_marca, modelo, descripcion, years, destacado, fecha_registro) VALUES (?, ?, ?, ?, ?, ?)';
         const values = [id_marca, modelo, descripcion, years, destacado, fecha_registro];
 
         db.query(query, values, (error, result) => {

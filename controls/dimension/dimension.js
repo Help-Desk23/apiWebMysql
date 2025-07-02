@@ -87,7 +87,7 @@ const updateDimensiones = async (req, res) => {
         return res.status(400).json({error: "No se proporcionaron campos para actualizar"})
     }
 
-    const query = `UPDATE dimensiones SET ${update.join(', ')} WHERE id_dimension = ?`;
+    const query = `UPDATE dimensiones SET ${update.join(', ')} WHERE id_dimensiones = ?`;
     values.push(id);
 
     db.query(query, values, (error, result) => {

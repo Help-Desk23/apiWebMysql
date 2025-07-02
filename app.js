@@ -62,7 +62,8 @@ const io = socketIo(server, {
 io.on('connection', (socket) => {
     console.log("Cliente conectado:", socket.id);
 
-    socket.on('obtenerAdmin', ({id_admin}) => getAdmin(socket, id_admin));
+    //socket.on('obtenerAdmin', ({id_admin}) => getAdmin(socket, id_admin));
+    socket.on('obtenerAdmin', () => getAdmin(socket));
     socket.on('obtenerCliente', () => getCliente(socket));
     socket.on('obtenerMarca', () => getMarca(socket));
     socket.on('obtenerMoto', () => getMoto(socket));
