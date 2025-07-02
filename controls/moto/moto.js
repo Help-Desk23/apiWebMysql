@@ -173,10 +173,48 @@ const getMotoCompleta = async (socket) => {
     }
 };
 
+
+//Controlador DELETE para eliminar todos las motos completamente
+
+const deleteMotoCompleta = async (req, res) => {
+    const {id_moto} = req.params;
+
+    if(!id_moto){
+        return res.status(400).json({ message: "Falta el parametro id_moto" });
+    }
+    const connection = await db.promise().getConnection();
+
+    try{
+        await connection.beginTransaction();
+        await connection.query(`DELETE FROM motor WHERE id_moto = ?`, [id_moto]);
+        await connection.query(`DELETE FROM color WHERE id_moto = ?`, [id_moto]);
+        await connection.query(`DELETE FROM dimensiones WHERE id_moto = ?`, [id_moto]);
+        await connection.query(`DELETE FROM seguridad WHERE id_moto = ?`, [id_moto]);
+
+        const [result] = await connection.query(`DELETE FROM moto WHERE id_moto = ?`, [id_moto]);
+
+        await connection.commit();
+
+        if(result.affectedRows === 0){
+            return res.status(404).json({message: "No se encontro moto para eliminar"});
+        }
+
+        res.status(200).json({ message: "Moto eliminado completamente"});
+    }catch(error){
+        await connection.rollback();
+        console.error("Error al eliminar una moto y sus relaciones", error.message);
+        res.status(500).json({ message: "Error al eliminar una moto y sus relaciones"});
+    } finally {
+        connection.release();
+    }
+};
+
+
 module.exports = {
     getMoto,
     addMoto,
     updateMoto,
     deleteMoto,
-    getMotoCompleta
+    getMotoCompleta,
+    deleteMotoCompleta
 };
