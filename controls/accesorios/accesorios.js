@@ -38,7 +38,7 @@ const getAccesorios = async (socket) => {
 const addAccesorios = async (req, res) => {
     const {id_marca, id_categoria, nombre_accesorio, descripcion} = req.body;
     const port = req.get('host').split(':')[1];
-    const imagen_accesorio = req.file ? `http://localhost:${port}/uploads/${req.file.filename}` : null;
+    const imagen_accesorio = req.file ? `https://www.api.vian.com.bo:${port}/uploads/${req.file.filename}` : null;
     const fecha_registro = new Date();
 
     try{
@@ -60,7 +60,7 @@ const updateAccesorios = async (req, res) => {
     const {id} = req.params;
     const {id_marca, id_categoria, nombre_accesorio, descripcion} = req.body;
     const port = req.get('host').split(':')[1];
-    const imagen_accesorio = req.file ? `http://localhost:${port}/uploads/${req.file.filename}` : null;
+    const imagen_accesorio = req.file ? `https://www.api.vian.com.bo:${port}/uploads/${req.file.filename}` : null;
     const fecha_registro = new Date();
 
     const update = [];

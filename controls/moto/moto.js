@@ -33,7 +33,9 @@ const addMoto = async (req, res) => {
                 console.error("Error al ingresar moto", error);
                 return res.status(500).json({error: "Error al registrar una moto"})
             }
-            res.status(201).json({message: "Moto ingresada correctamente"});
+            const id_moto = result.insertId;
+            console.log(id_moto);
+            res.status(201).json({message: "Moto ingresada correctamente", id_moto});
         });
     }catch(err){
         res.status(500).json({error: "Error interno del servidor"})
