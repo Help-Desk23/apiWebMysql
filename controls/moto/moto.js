@@ -105,7 +105,6 @@ const getMotoCompleta = async (socket) => {
             m.descripcion,
             m.years,
             m.destacado,
-            m.fecha_registro AS fecha_moto,
 
             mt.id_motor,
             mt.cilindraje,
@@ -113,12 +112,10 @@ const getMotoCompleta = async (socket) => {
             mt.potencia,
             mt.torque,
             mt.tipo_transmision,
-            mt.fecha_registro AS fecha_motor,
 
             c.id_color,
             c.nombre_color,
             c.img_moto,
-            c.fecha_registro AS fecha_color,
 
             d.id_dimensiones,
             d.rueda_delantera,
@@ -126,20 +123,22 @@ const getMotoCompleta = async (socket) => {
             d.dimension_total,
             d.distancia_ejes,
             d.peso,
-            d.fecha_registro AS fecha_dimension,
 
             s.id_seguridad,
             s.freno_delantero,
             s.freno_trasero,
             s.suspension_delantera,
             s.suspension_trasera,
-            s.fecha_registro AS fecha_seguridad
+
+            cm.id_catmoto,
+            cm.categoria_moto
 
         FROM moto m
         LEFT JOIN motor mt ON mt.id_moto = m.id_moto
         LEFT JOIN color c ON c.id_moto = m.id_moto
         LEFT JOIN dimensiones d ON d.id_moto = m.id_moto
-        LEFT JOIN seguridad s ON s.id_moto = m.id_moto;
+        LEFT JOIN seguridad s ON s.id_moto = m.id_moto
+        LEFT JOIN categoria_moto cm ON cm.id_catmoto = m.id_catmoto;
     `;
 
     try {
