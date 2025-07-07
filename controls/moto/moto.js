@@ -21,12 +21,12 @@ const getMoto = async (socket) => {
 //Controlador POST para crear nuevas motos
 
 const addMoto = async (req, res) => {
-    const {id_marca, modelo, descripcion, years, destacado} = req.body;
+    const {id_marca, id_catmoto, modelo, descripcion, years, destacado} = req.body;
     const fecha_registro = new Date();
 
     try{
-        const query = 'INSERT INTO moto (id_marca, modelo, descripcion, years, destacado, fecha_registro) VALUES (?, ?, ?, ?, ?, ?)';
-        const values = [id_marca, modelo, descripcion, years, destacado, fecha_registro];
+        const query = 'INSERT INTO moto (id_marca, id_catmoto, modelo, descripcion, years, destacado, fecha_registro) VALUES (?, ?, ?, ?, ?, ?, ?)';
+        const values = [id_marca, id_catmoto, modelo, descripcion, years, destacado, fecha_registro];
 
         db.query(query, values, (error, result) => {
             if(error){
@@ -46,7 +46,7 @@ const addMoto = async (req, res) => {
 
 const updateMoto = async (req, res) => {
     const {id} = req.params;
-    const {id_marca, modelo, descripcion, years, destacado} = req.body;
+    const {id_marca, id_catmoto, modelo, descripcion, years, destacado} = req.body;
     const fecha_registro = new Date();
 
     const update = [];
@@ -54,6 +54,11 @@ const updateMoto = async (req, res) => {
 
     if(id_marca){
         update.push('id_marca = ?');
+        values.push(id_marca);
+    }
+
+    if(id_catmoto){
+        update.push('id_catmoto = ?');
         values.push(id_marca);
     }
 
