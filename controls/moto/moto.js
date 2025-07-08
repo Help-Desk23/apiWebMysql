@@ -59,7 +59,7 @@ const updateMoto = async (req, res) => {
 
     if(id_catmoto){
         update.push('id_catmoto = ?');
-        values.push(id_marca);
+        values.push(id_catmoto);
     }
 
     if(modelo){
@@ -79,7 +79,7 @@ const updateMoto = async (req, res) => {
 
     if (typeof destacados !== 'undefined') {
         update.push('destacados = ?');
-        values.push(destacado ? 1 : 0);
+        values.push(destacados ? 1 : 0);
     }
 
     if(fecha_registro){
