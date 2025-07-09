@@ -33,6 +33,8 @@ const { getTalleres } = require('./controls/talleres/talleres');
 const tallerRouter = require('./router/tallerRouter/tallerRouter');
 const { getCatMoto } = require('./controls/categoriaMoto/categoriaMoto');
 const catMotoRouter = require('./router/catMotoRouter/catMotoRouter');
+const { getBanner } = require('./controls/banner/banner');
+const bannerRouter = require('./router/bannerRouter/bannerRouter');
 
 
 
@@ -64,7 +66,6 @@ const io = socketIo(server, {
 io.on('connection', (socket) => {
     console.log("Cliente conectado:", socket.id);
 
-    //socket.on('obtenerAdmin', ({id_admin}) => getAdmin(socket, id_admin));
     socket.on('obtenerAdmin', () => getAdmin(socket));
     socket.on('obtenerCliente', () => getCliente(socket));
     socket.on('obtenerMarca', () => getMarca(socket));
@@ -80,6 +81,7 @@ io.on('connection', (socket) => {
     socket.on('obtenerSucursal', () => getSucursal(socket));
     socket.on('obtenerTaller', () => getTalleres(socket));
     socket.on('obtenerCatMoto', () => getCatMoto(socket));
+    socket.on('obtenerBanner', () => getBanner(socket));
 
     socket.on('disconnect', () => {
         console.log('Cliente desconectado:', socket.id);
@@ -105,6 +107,7 @@ app.use('/', accesorioRouter);
 app.use('/', sucursalRouter);
 app.use('/', tallerRouter);
 app.use('/', catMotoRouter);
+app.use('/', bannerRouter);
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 

@@ -48,7 +48,7 @@ const addColor = async (req, res) => {
         res.status(201).json({message: "Color ingresado correctamente"});
     }catch(err){
         console.error("Error al ingresar un color de moto", err);
-        res.status(500).json({error: "Error al ingresar un color de moto"});
+        res.status(500).json({error: "Error interno del servidor"});
     }
 };
 
