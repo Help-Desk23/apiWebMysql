@@ -50,6 +50,11 @@ const addBanner = async (req, res) => {
     }
 
     try {
+        const [marcaResult] = await db.promise().query('SELECT 1 FROM marca WHERE id_marca = ?', [id_marca]);
+        if (marcaResult.length === 0) {
+            return res.status(400).json({ error: "La marca especificada no existe" });
+        }
+
         const query = 'INSERT INTO banner (id_marca, banner_top, banner_sidebar, fecha_registro) VALUES (?, ?, ?, ?)';
         const values = [id_marca, banner_top, banner_sidebar, fecha_registro];
 
@@ -60,6 +65,7 @@ const addBanner = async (req, res) => {
         res.status(500).json({ error: "Error interno del servidor" });
     }
 };
+
 
 //Controlador PATCH para editar los banners
 
