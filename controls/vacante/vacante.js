@@ -1,9 +1,10 @@
 const db = require('../../config/db');
-
+const nodemailer = require('nodemailer');
+require('dotenv').config();
 //Controlador Socket para obtener las vacantes
 
 const getVacante = async (socket) => {
-    const query = 'SELECT * FROM sucursal';
+    const query = 'SELECT * FROM vacantes';
     try{
         const [rows] = await db.promise().query(query);
         if(!rows || rows.length === 0){
@@ -19,22 +20,26 @@ const getVacante = async (socket) => {
 //Controlador POST para crear nueva vacante
 
 const addVacante = async (req, res) => {
-    const {nombre_vacante, ubicacion, modalidad, descripcion, requisitos, tipo_contrato, experiencia, beneficios, estado} = req.body;
-    const fecha_registro = new Date();
+    try {
+        const { nombre_vacante, ubicacion, modalidad, descripcion, requisitos, tipo_contrato, experiencia, beneficios, estado } = req.body;
+        const fecha_registro = new Date();
+        const estadoFinal = estado?.trim() ? estado : 'activo';
 
-    try{
-        const query = 'INSERT INTO vacante (nombre_vacante, ubicacion, modalidad, descripcion, requisitos, tipo_contrato, experiencia, beneficions, estado, fecha_registro) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-        const values = [nombre_vacante, ubicacion, modalidad, descripcion, requisitos, tipo_contrato, experiencia, beneficios, estado, fecha_registro];
+        const query = `INSERT INTO vacantes ( nombre_vacante, ubicacion, modalidad, descripcion, requisitos, tipo_contrato, experiencia, beneficios, estado, fecha_registro ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
+        const values = [ nombre_vacante, ubicacion, modalidad, descripcion, JSON.stringify(requisitos), tipo_contrato, experiencia, JSON.stringify(beneficios), estadoFinal, fecha_registro ];
 
         db.query(query, values, (error, result) => {
-            if(error){
+            if (error) {
                 console.error("Error al ingresar vacante", error);
-                return res.status(500).json({error: "Error al registrar vacante"})
+                return res.status(500).json({ error: "Error al registrar vacante" });
             }
+
             res.status(201).json({ message: "Vacante ingresada correctamente" });
         });
-    }catch(err){
-        res.status(500).json({error: "Error interno del servidor"})
+    } catch (err) {
+        console.error("Error interno del servidor", err);
+        res.status(500).json({ error: "Error interno del servidor" });
     }
 };
 
@@ -70,7 +75,7 @@ const updateVacante = async (req, res) => {
 
     if(requisitos){
         update.push("requisitos = ?");
-        values.push(requisitos);
+        values.push(JSON.stringify(requisitos));
     }
 
     if(tipo_contrato){
@@ -85,7 +90,7 @@ const updateVacante = async (req, res) => {
 
     if(beneficios){
         update.push("beneficios = ?");
-        values.push(beneficios);
+        values.push(JSON.stringify(beneficios));
     }
 
     if(estado){
@@ -100,7 +105,7 @@ const updateVacante = async (req, res) => {
         return res.status(400).json({error: "No se proporcionaron campos para actualizar"});
     }
 
-    const query = `UPDATE vacante SET ${update.join(', ')} WHERE id_vacante = ?`;
+    const query = `UPDATE vacantes SET ${update.join(', ')} WHERE id_vacante = ?`;
     values.push(id);
 
     db.query(query, values, (error, result) => {
@@ -116,7 +121,7 @@ const updateVacante = async (req, res) => {
 
 const deleteVacante = async (req, res) => {
     const {id} = req.params;
-    const query = 'DELETE FROM vacante WHERE id_vacante = ?';
+    const query = 'DELETE FROM vacantes WHERE id_vacante = ?';
     const values = [id];
 
     db.query(query, values, (error, result) => {
@@ -129,10 +134,57 @@ const deleteVacante = async (req, res) => {
     });
 };
 
+//Controlador POST para recibir todas las postulaciones
+
+ const enviarPostulacion = async (req, res) => {
+  const { nombre, email, mensaje, id_vacante } = req.body;
+  const cv = req.files?.cv;
+
+  if (!nombre || !email || !cv) {
+    return res.status(400).json({ error: 'Nombre, email y CV son obligatorios' });
+  }
+
+  if (cv.mimetype !== 'application/pdf') {
+    return res.status(400).json({ error: 'El CV debe estar en formato PDF' });
+  }
+
+  const transporter = nodemailer.createTransport({
+    service: 'SMTP', 
+    auth: {
+      user: process.env.MAIL_USER,
+      pass: process.env.MAIL_PASS
+    }
+  });
+
+  const mailOptions = {
+    from: email,
+    to: 'reclutamiento@vian.com.bo',
+    subject: `Nueva postulación - Vacante #${id_vacante || 'N/A'}`,
+    text: `
+      Nombre: ${nombre}
+      Email: ${email}
+      Vacante: ${id_vacante || 'No especificada'}
+      Mensaje: ${mensaje || 'Sin mensaje'}
+    `,
+    attachments: [{
+      filename: cv.name,
+      content: cv.data
+    }]
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    res.json({ success: true, message: 'Postulación enviada con éxito' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al enviar la postulación' });
+  }
+};
 
 module.exports = {
     getVacante,
     addVacante,
     updateVacante,
-    deleteVacante
+    deleteVacante,
+    enviarPostulacion
 };
