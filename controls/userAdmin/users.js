@@ -66,8 +66,8 @@ const updateAdmin = async (req, res) => {
     }
 
     if(roles){
-        if(roles !== 'administrador' && roles !== 'repuestos'){
-            return res.status(400).json({error: "El valor de 'roles' debe ser 'adminitrador' o 'repuestos'"});
+        if(roles !== 'administrador' && roles !== 'repuestos' && roles !== 'rrhh' && roles !== 'marketing'){
+            return res.status(400).json({error: "El valor de 'roles' debe ser 'adminitrador', 'repuestos', 'rrhh' o 'marketing'"});
         }
         update.push("roles = ?");
         values.push(roles);

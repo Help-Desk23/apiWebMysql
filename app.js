@@ -35,6 +35,8 @@ const { getCatMoto } = require('./controls/categoriaMoto/categoriaMoto');
 const catMotoRouter = require('./router/catMotoRouter/catMotoRouter');
 const { getBanner } = require('./controls/banner/banner');
 const bannerRouter = require('./router/bannerRouter/bannerRouter');
+const { getVacante } = require('./controls/vacante/vacante');
+const vacanteRouter = require('./router/vacanteRouter/vacanteRouter');
 
 
 
@@ -83,6 +85,7 @@ io.on('connection', (socket) => {
     socket.on('obtenerTaller', () => getTalleres(socket));
     socket.on('obtenerCatMoto', () => getCatMoto(socket));
     socket.on('obtenerBanner', () => getBanner(socket));
+    socket.on('obtenerVacante', () => getVacante(socket));
 
     socket.on('disconnect', () => {
         console.log('Cliente desconectado:', socket.id);
@@ -109,6 +112,7 @@ app.use('/', sucursalRouter);
 app.use('/', tallerRouter);
 app.use('/', catMotoRouter);
 app.use('/', bannerRouter);
+app.use('/', vacanteRouter);
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
