@@ -39,7 +39,7 @@ const addVacante = async (req, res) => {
         });
     } catch (err) {
         console.error("Error interno del servidor", err);
-        res.status(500).json({ error: "Error interno del servidor" });
+        res.status(500).json({ error: "Error interno del servidor" });
     }
 };
 
@@ -137,7 +137,7 @@ const deleteVacante = async (req, res) => {
 //Controlador POST para recibir todas las postulaciones
 
  const enviarPostulacion = async (req, res) => {
-  const { nombre, email, mensaje, id_vacante } = req.body;
+  const { nombre, email, mensaje, nombre_vacante } = req.body;
   const cv = req.files?.cv;
 
   if (!nombre || !email || !cv) {
@@ -149,7 +149,9 @@ const deleteVacante = async (req, res) => {
   }
 
   const transporter = nodemailer.createTransport({
-    service: 'SMTP', 
+    host: 'mail.vian.com.bo',
+    port: 465,       
+    secure: true,                
     auth: {
       user: process.env.MAIL_USER,
       pass: process.env.MAIL_PASS
@@ -159,11 +161,11 @@ const deleteVacante = async (req, res) => {
   const mailOptions = {
     from: email,
     to: 'reclutamiento@vian.com.bo',
-    subject: `Nueva postulación - Vacante #${id_vacante || 'N/A'}`,
+    subject: `Nueva postulación - Vacante ${nombre_vacante || 'PAGINA WEB'}`,
     text: `
       Nombre: ${nombre}
       Email: ${email}
-      Vacante: ${id_vacante || 'No especificada'}
+      Vacante: ${nombre_vacante || 'No especificada'}
       Mensaje: ${mensaje || 'Sin mensaje'}
     `,
     attachments: [{
