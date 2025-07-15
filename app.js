@@ -3,7 +3,7 @@ const http = require('http');
 const socketIo = require('socket.io');
 const path = require('path');
 const cors = require('cors');
-const fileUpload = require('express-fileupload');
+//const fileUpload = require('express-fileupload');
 require('dotenv').config();
 
 const { getAdmin } = require('./controls/userAdmin/users');
@@ -57,7 +57,7 @@ app.use(cors({
 
 
 app.use(express.json());
-app.use(fileUpload());
+//app.use(fileUpload());
 
 
 const server = http.createServer(app);

@@ -1,5 +1,5 @@
 const express = require('express');
-const { addVacante, updateVacante, deleteVacante, enviarPostulacion } = require('../../controls/vacante/vacante');
+const { addVacante, updateVacante, deleteVacante, enviarPostulacion, upload } = require('../../controls/vacante/vacante');
 
 const vacanteRouter = express.Router();
 
@@ -17,6 +17,6 @@ vacanteRouter.delete("/vacante/:id", deleteVacante);
 
 //Ruta para enviar postulacion
 
-vacanteRouter.post("/postulaciones", enviarPostulacion)
+vacanteRouter.post("/postulaciones", upload.single('cv'), enviarPostulacion)
 
 module.exports = vacanteRouter;

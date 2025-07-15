@@ -21,12 +21,12 @@ const getMoto = async (socket) => {
 //Controlador POST para crear nuevas motos
 
 const addMoto = async (req, res) => {
-    const {id_marca, id_catmoto, modelo, descripcion, years, destacados} = req.body;
+    const {id_marca, id_catmoto, modelo, descripcion, years, destacados, enlace_3d } = req.body;
     const fecha_registro = new Date();
 
     try{
-        const query = 'INSERT INTO moto (id_marca, id_catmoto, modelo, descripcion, years, destacados, fecha_registro) VALUES (?, ?, ?, ?, ?, ?, ?)';
-        const values = [id_marca, id_catmoto, modelo, descripcion, years, destacados, fecha_registro];
+        const query = 'INSERT INTO moto (id_marca, id_catmoto, modelo, descripcion, years, destacados, enlace_3d, fecha_registro) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+        const values = [id_marca, id_catmoto, modelo, descripcion, years, destacados, enlace_3d, fecha_registro];
 
         db.query(query, values, (error, result) => {
             if(error){
@@ -46,7 +46,7 @@ const addMoto = async (req, res) => {
 
 const updateMoto = async (req, res) => {
     const {id} = req.params;
-    const {id_marca, id_catmoto, modelo, descripcion, years, destacados} = req.body;
+    const {id_marca, id_catmoto, modelo, descripcion, years, destacados, enlace_3d} = req.body;
     const fecha_registro = new Date();
 
     const update = [];
@@ -82,6 +82,11 @@ const updateMoto = async (req, res) => {
         values.push(destacados ? 1 : 0);
     }
 
+    if(enlace_3d){
+        update.push('enlace_3d = ?');
+        values.push(enlace_3d);
+    }
+
     if(fecha_registro){
         update.push('fecha_registro = ?');
         values.push(fecha_registro);
@@ -110,6 +115,7 @@ const getMotoCompleta = async (socket) => {
             m.descripcion,
             m.years,
             m.destacados,
+            m.enlace_3d,
 
             mt.id_motor,
             mt.cilindraje,

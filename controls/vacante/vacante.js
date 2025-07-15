@@ -1,6 +1,27 @@
 const db = require('../../config/db');
 const nodemailer = require('nodemailer');
+const multer = require('multer');
 require('dotenv').config();
+
+
+//Configuracion multer para recibir cv
+
+const storage = multer.memoryStorage();
+
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 5 * 1024 * 1024
+  },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype === 'application/pdf') {
+      cb(null, true);
+    } else {
+      cb(new Error('El CV debe estar en formato PDF'));
+    }
+  }
+});
+
 //Controlador Socket para obtener las vacantes
 
 const getVacante = async (socket) => {
@@ -136,57 +157,54 @@ const deleteVacante = async (req, res) => {
 
 //Controlador POST para recibir todas las postulaciones
 
- const enviarPostulacion = async (req, res) => {
-  const { nombre, email, mensaje, nombre_vacante } = req.body;
-  const cv = req.files?.cv;
-
-  if (!nombre || !email || !cv) {
-    return res.status(400).json({ error: 'Nombre, email y CV son obligatorios' });
-  }
-
-  if (cv.mimetype !== 'application/pdf') {
-    return res.status(400).json({ error: 'El CV debe estar en formato PDF' });
-  }
-
-  const transporter = nodemailer.createTransport({
-    host: 'mail.vian.com.bo',
-    port: 465,       
-    secure: true,                
-    auth: {
-      user: process.env.MAIL_USER,
-      pass: process.env.MAIL_PASS
+const enviarPostulacion = async (req, res) => {
+    const { nombre, email, mensaje, nombre_vacante } = req.body;
+    const cv = req.file;
+  
+    if (!nombre || !email || !cv) {
+      return res.status(400).json({ error: 'Nombre, email y CV son obligatorios' });
     }
-  });
-
-  const mailOptions = {
-    from: email,
-    to: 'reclutamiento@vian.com.bo',
-    subject: `Nueva postulación - Vacante ${nombre_vacante || 'PAGINA WEB'}`,
-    text: `
-      Nombre: ${nombre}
-      Email: ${email}
-      Vacante: ${nombre_vacante || 'No especificada'}
-      Mensaje: ${mensaje || 'Sin mensaje'}
-    `,
-    attachments: [{
-      filename: cv.name,
-      content: cv.data
-    }]
+  
+    const transporter = nodemailer.createTransport({
+      host: 'mail.vian.com.bo',
+      port: 465,
+      secure: true,
+      auth: {
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASS
+      }
+    });
+  
+    const mailOptions = {
+      from: email,
+      to: 'reclutamiento@vian.com.bo',
+      subject: `Nueva postulación - Vacante ${nombre_vacante || 'PÁGINA WEB'}`,
+      text: `
+        Nombre: ${nombre}
+        Email: ${email}
+        Vacante: ${nombre_vacante || 'No especificada'}
+        Mensaje: ${mensaje || 'Sin mensaje'}
+      `,
+      attachments: [{
+        filename: cv.originalname,
+        content: cv.buffer
+      }]
+    };
+  
+    try {
+      await transporter.sendMail(mailOptions);
+      res.json({ success: true, message: 'Postulación enviada con éxito' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Error al enviar la postulación' });
+    }
   };
-
-  try {
-    await transporter.sendMail(mailOptions);
-    res.json({ success: true, message: 'Postulación enviada con éxito' });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error al enviar la postulación' });
-  }
-};
 
 module.exports = {
     getVacante,
     addVacante,
     updateVacante,
     deleteVacante,
-    enviarPostulacion
+    enviarPostulacion,
+    upload
 };
