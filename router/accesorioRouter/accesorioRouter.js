@@ -1,6 +1,6 @@
 const express = require('express');
-const { addAccesorios, upload, updateAccesorios, deleteAccesorios } = require('../../controls/accesorios/accesorios');
-
+const { addAccesorios, updateAccesorios, deleteAccesorios } = require('../../controls/accesorios/accesorios');
+const { upload } = require('../../middleware/multer');
 const accesorioRouter = express.Router();
 
 //Ruta para agregar los accesorios

@@ -21,12 +21,12 @@ const getMoto = async (socket) => {
 //Controlador POST para crear nuevas motos
 
 const addMoto = async (req, res) => {
-    const {id_marca, id_catmoto, modelo, descripcion, years, destacados, enlace_3d } = req.body;
+    const {id_marca, id_catmoto, modelo, descripcion, years, destacados, enlace_3d, precio_usd, inicial_bs } = req.body;
     const fecha_registro = new Date();
 
     try{
-        const query = 'INSERT INTO moto (id_marca, id_catmoto, modelo, descripcion, years, destacados, enlace_3d, fecha_registro) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-        const values = [id_marca, id_catmoto, modelo, descripcion, years, destacados, enlace_3d, fecha_registro];
+        const query = 'INSERT INTO moto (id_marca, id_catmoto, modelo, descripcion, years, destacados, enlace_3d, fecha_registro) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        const values = [id_marca, id_catmoto, modelo, descripcion, years, destacados, enlace_3d, precio_usd, inicial_bs, fecha_registro];
 
         db.query(query, values, (error, result) => {
             if(error){
@@ -46,7 +46,7 @@ const addMoto = async (req, res) => {
 
 const updateMoto = async (req, res) => {
     const {id} = req.params;
-    const {id_marca, id_catmoto, modelo, descripcion, years, destacados, enlace_3d} = req.body;
+    const {id_marca, id_catmoto, modelo, descripcion, years, destacados, enlace_3d, precio_usd, inicial_bs} = req.body;
     const fecha_registro = new Date();
 
     const update = [];
@@ -80,6 +80,16 @@ const updateMoto = async (req, res) => {
     if (typeof destacados !== 'undefined') {
         update.push('destacados = ?');
         values.push(destacados ? 1 : 0);
+    }
+
+    if(precio_usd){
+        update.push('precio_usd = ?');
+        values.push(precio_usd);
+    }
+
+    if(inicial_bs){
+        update.push('inicial_bs = ?');
+        values.push(inicial_bs);
     }
 
     if(enlace_3d){
@@ -116,6 +126,8 @@ const getMotoCompleta = async (socket) => {
             m.years,
             m.destacados,
             m.enlace_3d,
+            m.precio_usd,
+            m.inicial_bs,
 
             mt.id_motor,
             mt.cilindraje,

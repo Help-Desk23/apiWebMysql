@@ -1,19 +1,4 @@
 const db = require('../../config/db');
-const multer = require('multer');
-const path = require('path');
-
-//Configuracion de multer
-
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads/');
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname));
-    }
-});
-
-const upload = multer({storage: storage});
 
 //Controlador GET para obtener los colores de las motos
 
@@ -121,5 +106,4 @@ module.exports = {
     addColor,
     updateColor,
     deleteColor,
-    upload
 };

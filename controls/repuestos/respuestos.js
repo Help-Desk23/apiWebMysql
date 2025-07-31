@@ -1,19 +1,4 @@
 const db = require('../../config/db');
-const multer = require('multer');
-const path = require('path');
-
-//Configuracion de multer
-
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads/');
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname));
-    }
-});
-
-const upload = multer({storage: storage});
 
 //Controlador GET para mostrar los respuestos
 
@@ -126,6 +111,5 @@ module.exports = {
     getRepuestos,
     addRepuestos,
     updateRepuestos,
-    deleteRepuestos,
-    upload
+    deleteRepuestos
 };

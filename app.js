@@ -3,7 +3,6 @@ const http = require('http');
 const socketIo = require('socket.io');
 const path = require('path');
 const cors = require('cors');
-//const fileUpload = require('express-fileupload');
 require('dotenv').config();
 
 const { getAdmin } = require('./controls/userAdmin/users');
@@ -38,35 +37,37 @@ const { getBanner } = require('./controls/banner/banner');
 const bannerRouter = require('./router/bannerRouter/bannerRouter');
 const { getVacante } = require('./controls/vacante/vacante');
 const vacanteRouter = require('./router/vacanteRouter/vacanteRouter');
-
-
+const { getCostos } = require('./controls/costovarios/costo');
+const costoRouter = require('./router/costovarios/costoRouter');
+const { getFuncionarios } = require('./controls/funcionario/funcionario');
+const funciorioRouter = require('./router/funcionarioRouter/funcionarioRouter');
+const server = http.createServer(app);
+app.use(express.json());
 
 const app = express();
 
+const allowedOrigins = [
+  'http://localhost:7000',            
+  'http://177.222.114.122',
+  'http://localhost',
+  'http://localhost:5173',
+  'http://localhost:5174' 
+];
+
+const io = socketIo(server, {
+  cors: {
+    origin: allowedOrigins,
+    methods: ['GET'],
+    credentials: true
+  }
+});
+
 app.use(cors({
-  origin: [
-    'http://localhost:6000',            
-    'http://177.222.114.122',
-    'http://localhost',
-    'http://localhost:5173',
-    'http://localhost:5174' 
-  ],
+  origin: allowedOrigins,
   methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT'],
   credentials: true
 }));
 
-
-app.use(express.json());
-//app.use(fileUpload());
-
-
-const server = http.createServer(app);
-const io = socketIo(server, {
-  cors: {
-    origin: '*',
-    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT']
-  }
-});
 
 io.on('connection', (socket) => {
     console.log("Cliente conectado:", socket.id);
@@ -88,6 +89,8 @@ io.on('connection', (socket) => {
     socket.on('obtenerCatMoto', () => getCatMoto(socket));
     socket.on('obtenerBanner', () => getBanner(socket));
     socket.on('obtenerVacante', () => getVacante(socket));
+    socket.on('obtenerCosto', () => getCostos(socket));
+    socket.on('obtenerFuncionario', () => getFuncionarios(socket));
 
     socket.on('disconnect', () => {
         console.log('Cliente desconectado:', socket.id);
@@ -115,8 +118,10 @@ app.use('/', tallerRouter);
 app.use('/', catMotoRouter);
 app.use('/', bannerRouter);
 app.use('/', vacanteRouter);
+app.use('/', costoRouter);
+app.use('/', funciorioRouter);
 
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+//app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const PORT = process.env.API_PORT;
 server.listen(PORT, () => {

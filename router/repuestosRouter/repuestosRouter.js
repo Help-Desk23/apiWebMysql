@@ -1,5 +1,6 @@
 const express = require('express');
-const { addRepuestos, updateRepuestos, upload, deleteRepuestos } = require('../../controls/repuestos/respuestos');
+const { addRepuestos, updateRepuestos, deleteRepuestos } = require('../../controls/repuestos/respuestos');
+const { upload } = require('../../middleware/multer');
 
 const repuestosRouter = express.Router();
 
