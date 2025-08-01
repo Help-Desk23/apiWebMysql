@@ -41,10 +41,10 @@ const { getCostos } = require('./controls/costovarios/costo');
 const costoRouter = require('./router/costovarios/costoRouter');
 const { getFuncionarios } = require('./controls/funcionario/funcionario');
 const funciorioRouter = require('./router/funcionarioRouter/funcionarioRouter');
+const app = express();
 const server = http.createServer(app);
 app.use(express.json());
 
-const app = express();
 
 const allowedOrigins = [
   'http://localhost:7000',            
@@ -121,7 +121,7 @@ app.use('/', vacanteRouter);
 app.use('/', costoRouter);
 app.use('/', funciorioRouter);
 
-//app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const PORT = process.env.API_PORT;
 server.listen(PORT, () => {

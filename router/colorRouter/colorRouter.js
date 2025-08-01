@@ -1,6 +1,6 @@
 const express = require('express');
 const { addColor, updateColor, deleteColor } = require('../../controls/colorMoto/color');
-const { upload } = require('../../middleware/multer');
+const upload  = require('../../middleware/multer');
 
 const colorRouter = express.Router();
 

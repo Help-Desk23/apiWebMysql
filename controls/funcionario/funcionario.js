@@ -21,13 +21,13 @@ const getFuncionarios = async(socket) => {
 //Controlador POST para agregar funcionarios
 
 const addFuncionarios = async (req, res) => {
-    const { nombre, cargo, telefono } = req.body;
-    const img_funcionario = req.file ? `https://www.api.vian.com.bo/upload/${req.filename}` : null;
+    const { nombre, cargo, telefono, correo } = req.body;
+    const img_funcionario = req.file ? `https://www.api.vian.com.bo/uploads/${req.file.filename}` : null;
     const fecha_registro = new Date();
 
     try{
-        const query = 'INSERT INTO funcionario (nombre, cargo, telefono, img_funcionario, fecha_registro) VALUES (?, ?, ?, ?, ?)';
-        const values = [nombre, cargo, telefono, img_funcionario, fecha_registro];
+        const query = 'INSERT INTO funcionario (nombre, cargo, telefono, correo, img_funcionario, fecha_registro) VALUES (?, ?, ?, ?, ?, ?)';
+        const values = [nombre, cargo, telefono, correo, img_funcionario, fecha_registro];
 
         await db.promise().query(query, values);
         res.status(201).json({ message: "Funcionario ingresado correctamente" });
@@ -41,8 +41,8 @@ const addFuncionarios = async (req, res) => {
 
 const updateFuncionario = async (req, res) => {
     const { id } = req.params;
-    const { nombre, cargo, telefono } = req.body;
-    const img_funcionario = req.file ? `https:/www.api.vian.com.bo/uploads/${req.file.filename}` : null;
+    const { nombre, cargo, telefono, correo } = req.body;
+    const img_funcionario = req.file ? `https://www.api.vian.com.bo/uploads/${req.file.filename}` : null;
 
     const update = [];
     const values = [];
@@ -60,6 +60,11 @@ const updateFuncionario = async (req, res) => {
     if(telefono){
         update.push('telefono = ?');
         values.push(telefono);
+    }
+
+    if(correo){
+        update.push('correo = ?');
+        values.push(correo);
     }
 
     if(img_funcionario){

@@ -1,6 +1,6 @@
 const express = require('express');
 const { addBanner, updateBanner, deleteBanner } = require('../../controls/banner/banner');
-const { upload } = require('../../middleware/multer');
+const upload = require('../../middleware/multer');
 const bannerRouter = express.Router();
 
 //Ruta para agregar banner para la pagina web

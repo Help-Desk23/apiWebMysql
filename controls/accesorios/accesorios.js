@@ -116,6 +116,5 @@ module.exports = {
     getAccesorios,
     addAccesorios,
     updateAccesorios,
-    deleteAccesorios,
-    upload
+    deleteAccesorios
 };
