@@ -40,7 +40,7 @@ const vacanteRouter = require('./router/vacanteRouter/vacanteRouter');
 const { getCostos } = require('./controls/costovarios/costo');
 const costoRouter = require('./router/costovarios/costoRouter');
 const { getFuncionarios } = require('./controls/funcionario/funcionario');
-const funciorioRouter = require('./router/funcionarioRouter/funcionarioRouter');
+const funcionarioRouter = require('./router/funcionarioRouter/funcionarioRouter');
 const app = express();
 const server = http.createServer(app);
 app.use(express.json());
@@ -119,7 +119,7 @@ app.use('/', catMotoRouter);
 app.use('/', bannerRouter);
 app.use('/', vacanteRouter);
 app.use('/', costoRouter);
-app.use('/', funciorioRouter);
+app.use('/', funcionarioRouter);
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 

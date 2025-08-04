@@ -2,7 +2,7 @@ const express = require('express');
 const { addFuncionarios, updateFuncionario, deleteFuncionario } = require('../../controls/funcionario/funcionario');
 const upload = require('../../middleware/multer');
 
-const funciorioRouter = express.Router();
+const funcionarioRouter = express.Router();
 
 //Ruta POST para agregar funcionario
 
@@ -16,4 +16,4 @@ funciorioRouter.patch("/funcionario/:id", upload.single('img_funcionario'), upda
 
 funciorioRouter.delete("/funcionario/:id", deleteFuncionario);
 
-module.exports = funciorioRouter;
+module.exports = funcionarioRouter;
