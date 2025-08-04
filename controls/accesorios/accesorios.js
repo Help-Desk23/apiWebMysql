@@ -21,13 +21,13 @@ const getAccesorios = async (socket) => {
 //Controlador POST para ingresar accesorios
 
 const addAccesorios = async (req, res) => {
-    const {id_marca, id_categoria, nombre_accesorio, descripcion} = req.body;
+    const {id_marca, id_categoria, nombre_accesorio, descripcion, precio} = req.body;
     const imagen_accesorio = req.file ? `https://www.api.vian.com.bo/uploads/${req.file.filename}` : null;
     const fecha_registro = new Date();
 
     try{
-        const query = 'INSERT INTO accesorios (id_marca, id_categoria, nombre_accesorio, descripcion, imagen_accesorio, fecha_registro) VALUES (?, ?, ?, ?, ?, ?)';
-        const values = [id_marca, id_categoria, nombre_accesorio, descripcion, imagen_accesorio, fecha_registro];
+        const query = 'INSERT INTO accesorios (id_marca, id_categoria, nombre_accesorio, descripcion, precio, imagen_accesorio, fecha_registro) VALUES (?, ?, ?, ?, ?, ?, ?)';
+        const values = [id_marca, id_categoria, nombre_accesorio, descripcion, imagen_accesorio, precio, fecha_registro];
 
         await db.promise().query(query, values);
         res.status(201).json({message: "Accesorio ingresado correctamente"});
@@ -42,7 +42,7 @@ const addAccesorios = async (req, res) => {
 
 const updateAccesorios = async (req, res) => {
     const {id} = req.params;
-    const {id_marca, id_categoria, nombre_accesorio, descripcion} = req.body;
+    const {id_marca, id_categoria, nombre_accesorio, descripcion, precio} = req.body;
     const imagen_accesorio = req.file ? `https://www.api.vian.com.bo/uploads/${req.file.filename}` : null;
     const fecha_registro = new Date();
 
@@ -67,6 +67,11 @@ const updateAccesorios = async (req, res) => {
     if(descripcion){
         update.push('descripcion = ?');
         values.push(descripcion);
+    }
+
+    if(precio){
+        update.push('precio = ?');
+        values.push(precio);
     }
 
     if(imagen_accesorio){

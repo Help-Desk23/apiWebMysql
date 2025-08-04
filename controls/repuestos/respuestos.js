@@ -21,13 +21,13 @@ const getRepuestos = async (socket) => {
 //Controlador POST para agregar repuestos
 
 const addRepuestos = async (req, res) => {
-    const {id_marca, nombre_repuesto, detalle} = req.body;
+    const {id_marca, nombre_repuesto, detalle, precio} = req.body;
     const imagen_repuesto = req.file ? `https://www.api.vian.com.bo/uploads/${req.file.filename}` : null;
     const fecha_registro = new Date();
 
     try{
-        const query = 'INSERT INTO repuestos (id_marca, nombre_repuesto, detalle, imagen_repuesto, fecha_registro) VALUES (?, ?, ?, ?, ?)';
-        const values = [id_marca, nombre_repuesto, detalle, imagen_repuesto, fecha_registro];
+        const query = 'INSERT INTO repuestos (id_marca, nombre_repuesto, detalle, precio, imagen_repuesto, fecha_registro) VALUES (?, ?, ?, ?, ?, ?)';
+        const values = [id_marca, nombre_repuesto, detalle, precio, imagen_repuesto, fecha_registro];
         
         await db.promise().query(query, values);
         res.status(201).json({message: "Repuesto ingresado correctamente"});
@@ -41,7 +41,7 @@ const addRepuestos = async (req, res) => {
 
 const updateRepuestos = async (req, res) => {
     const {id} = req.params;
-    const {id_marca, nombre_repuesto, detalle} = req.body;
+    const {id_marca, nombre_repuesto, detalle, precio} = req.body;
     const port = req.get('host').split(':')[1];
     const imagen_repuesto = req.file ? `https://www.api.vian.com.bo/uploads/${req.file.filename}` : null;
     const fecha_registro = new Date();
@@ -62,6 +62,11 @@ const updateRepuestos = async (req, res) => {
     if(detalle){
         update.push('detalle = ?');
         values.push(detalle);
+    }
+
+    if(precio){
+        update.push('precio = ?');
+        values.push(precio);
     }
 
     if(imagen_repuesto){
