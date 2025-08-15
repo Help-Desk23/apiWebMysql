@@ -76,7 +76,7 @@ const updateTalleres = async (req, res) => {
 
     if(longitud){
         update.push("longitud = ?");
-        values.push(latitud);
+        values.push(longitud);
     }
 
     if(latitud){

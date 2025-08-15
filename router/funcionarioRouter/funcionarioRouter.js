@@ -6,14 +6,14 @@ const funcionarioRouter = express.Router();
 
 //Ruta POST para agregar funcionario
 
-funciorioRouter.post("/funcionario", upload.single('img_funcionario'), addFuncionarios);
+funcionarioRouter.post("/funcionario", upload.single('img_funcionario'), addFuncionarios);
 
 //Ruta PATCH para editar funcionario
 
-funciorioRouter.patch("/funcionario/:id", upload.single('img_funcionario'), updateFuncionario);
+funcionarioRouter.patch("/funcionario/:id", upload.single('img_funcionario'), updateFuncionario);
 
 //Ruta DELETE para eliminar funcionario
 
-funciorioRouter.delete("/funcionario/:id", deleteFuncionario);
+funcionarioRouter.delete("/funcionario/:id", deleteFuncionario);
 
 module.exports = funcionarioRouter;

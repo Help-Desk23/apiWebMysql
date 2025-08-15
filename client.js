@@ -3,10 +3,10 @@ const socket = io('http://177.222.114.122:7000');
 
 socket.on('connect', () => {
     console.log('Conectado al servidor WebSocket');
-    socket.emit('obtenerSucursal');
+    socket.emit('obtenerBanner');
 });
 
-socket.on('sucursal', (data) => {
+socket.on('banner', (data) => {
     console.log('Datos mostrados:', data);
 });
 

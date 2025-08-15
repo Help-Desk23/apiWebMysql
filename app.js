@@ -51,7 +51,8 @@ const allowedOrigins = [
   'http://177.222.114.122',
   'http://localhost',
   'http://localhost:5173',
-  'http://localhost:5174' 
+  'http://localhost:5174',
+  'https://www.api.vian.com.bo' 
 ];
 
 const io = socketIo(server, {
