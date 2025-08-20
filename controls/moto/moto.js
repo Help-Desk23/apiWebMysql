@@ -21,24 +21,25 @@ const getMoto = async (socket) => {
 //Controlador POST para crear nuevas motos
 
 const addMoto = async (req, res) => {
-    const {id_marca, id_catmoto, modelo, descripcion, years, destacados, enlace_3d, precio_usd, inicial_bs } = req.body;
-    const fecha_registro = new Date();
+    const { id_marca, id_catmoto, modelo, descripcion, years, destacados, enlace_3d, precio_usd, inicial_bs } = req.body;
+    const fecha_registro = new Date(); // Este valor se crea correctamente
 
-    try{
-        const query = 'INSERT INTO moto (id_marca, id_catmoto, modelo, descripcion, years, destacados, enlace_3d, fecha_registro) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-        const values = [id_marca, id_catmoto, modelo, descripcion, years, destacados, enlace_3d, precio_usd, inicial_bs, fecha_registro];
-
+    try {
+        const query = 'INSERT INTO moto (id_marca, id_catmoto, modelo, descripcion, years, destacados, enlace_3d, fecha_registro, precio_usd, inicial_bs) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        
+        const values = [id_marca, id_catmoto, modelo, descripcion, years, destacados, enlace_3d, fecha_registro, precio_usd, inicial_bs];
+        
         db.query(query, values, (error, result) => {
-            if(error){
+            if (error) {
                 console.error("Error al ingresar moto", error);
-                return res.status(500).json({error: "Error al registrar una moto"})
+                return res.status(500).json({ error: "Error al registrar una moto" });
             }
             const id_moto = result.insertId;
             console.log(id_moto);
-            res.status(201).json({message: "Moto ingresada correctamente", id_moto});
+            res.status(201).json({ message: "Moto ingresada correctamente", id_moto });
         });
-    }catch(err){
-        res.status(500).json({error: "Error interno del servidor"})
+    } catch (err) {
+        res.status(500).json({ error: "Error interno del servidor" });
     }
 };
 
